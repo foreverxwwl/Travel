@@ -14,5 +14,10 @@ public interface UserService {
      */
     public boolean regist(User user);
 
-
+    /**
+     * 激活用户
+     * @param code 激活码
+     * @return 激活状态
+     */
+    boolean active(String code);
 }

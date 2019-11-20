@@ -52,5 +52,31 @@ public class UserDaoImpl implements UserDao {
         );
     }
 
+    /**
+     * 通过激活码查找用户
+     * @param code 激活码
+     * @return 找到的用户
+     */
+    @Override
+    public User findBycode(String code) {
+        User user = null;
+        try {
+            String sql = "select * from tab_user where code = ?";
+            user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), code);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return user;
 
+    }
+
+    /**
+     * 修改用户激活状态
+     * @param user 待修改用户
+     */
+    @Override
+    public void active(User user) {
+        String sql = "update tab_user set status = 'Y' where code=?";
+        template.update(sql,user.getCode());
+    }
 }

@@ -19,4 +19,17 @@ public interface UserDao {
      * @param user 待保存的用户
      */
     public void save(User user);
+
+    /**
+     * 通过激活码查找用户
+     * @param code 激活码
+     * @return 找到的用户
+     */
+    User findBycode(String code);
+
+    /**
+     * 修改用户激活状态
+     * @param user 待修改用户
+     */
+    void active(User user);
 }
