@@ -20,4 +20,11 @@ public interface UserService {
      * @return 激活状态
      */
     boolean active(String code);
+
+    /**
+     * 登录功能
+     * @param loginUser 登录的用户信息
+     * @return 查找到的用户
+     */
+    User login(User loginUser);
 }

@@ -35,10 +35,9 @@ public class UserServicempi implements UserService {
         userDao.save(user);
 
         //发送激活邮件
-        String content="<a href='http://localhost/travel/activeUserServlet?code="+user.getCode()+"'>点击激活【黑马旅游网】</a>";
+        String content="<a href='http://localhost/travel/user/active?code="+user.getCode()+"'>点击激活【黑马旅游网】</a>";
 
         MailUtils.sendMail(user.getEmail(),content,"激活邮件");
-
         return true;
     }
 
@@ -56,6 +55,16 @@ public class UserServicempi implements UserService {
         }
         userDao.active(user);
         return true;
+    }
+
+    /**
+     * 登录功能
+     * @param loginUser 登录的用户信息
+     * @return 查找到的用户
+     */
+    @Override
+    public User login(User loginUser) {
+        return userDao.findByUsernameAndPassword(loginUser.getUsername(), loginUser.getPassword());
     }
 
 }
