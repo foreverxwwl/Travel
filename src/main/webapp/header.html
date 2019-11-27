@@ -14,7 +14,7 @@
             var lis = '<li class=\"nav-active\"><a href=\"index.html\">首页</a></li>';
             //遍历数组拼接字符串
             for (var i = 0; i < data.length; i++) {
-                lis += '<li><a href="route_list.html">'+ data[i].cname+'</a></li>'
+                lis += '<li><a href="route_list.html?cid='+ data[i].cid +'">'+ data[i].cname+'</a></li>'
             }
             lis += '<li><a href="favoriterank.html">收藏排行榜</a></li>';
 
@@ -43,9 +43,9 @@
         </div>
         <div class="header_wrap">
             <div class="topbar">
-                <div class="logo">
-                    <a href="/"><img src="images/logo.jpg" alt=""></a>
-                </div>
+<!--                <div class="logo">-->
+<!--                    <a href="/"><img src="images/logo.jpg" alt=""></a>-->
+<!--                </div>-->
                 <div class="search">
                     <input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
                     <a href="javascript:;" class="search-button">搜索</a>

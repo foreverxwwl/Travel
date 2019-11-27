@@ -9,6 +9,47 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {//在此页面上吧cid取出来
+            var search = location.search;//search = ?id=5
+            //切割字符串
+            var cid = search.split("=")[1];
+            //当页面加载完后 调用load方法发送ajax请求
+            load(cid);
+           });
+        function load(cid, currentPage) {
+            //1.发送ajax请求，请求route/pageQuery，传递cid
+            $.get("route/pageQuery",{cid:cid,currentPage:currentPage}, function (pb) {
+                //解析pagebean数据展示在页面上
+
+                //1.分页工具条数据展示
+                //1.1展示页码总数和总记录数
+                $("#totalCount").html(pb.totalCount);
+                $("#totalPage").html(pb.totalPage);
+
+                /*
+                            <li><a href="">首页</a></li>
+                            <li class="threeword"><a href="#">上一页</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">6</a></li>
+                            <li><a href="#">7</a></li>
+                            <li><a href="#">8</a></li>
+                            <li><a href="#">9</a></li>
+                            <li><a href="#">10</a></li>
+                            <li class="threeword"><a href="javascript:;">下一页</a></li>
+                            <li class="threeword"><a href="javascript:;">末页</a></li>
+                 */
+                var li = null;
+                var firstPage = '<li><a href="">首页</a></li>';
+                var beforepage = '<li class="threeword"><a href="#">上一页</a></li>';
+            })
+        }
+
+    </script>
 </head>
 <body>
 <!--引入头部-->
@@ -157,7 +198,7 @@
                     </ul>
                     <div class="page_num_inf">
                         <i></i> 共
-                        <span>12</span>页<span>132</span>条
+                        <span id="totalPage"></span>页<span id="totalCount"></span>条
                     </div>
                     <div class="pageNum">
                         <ul>

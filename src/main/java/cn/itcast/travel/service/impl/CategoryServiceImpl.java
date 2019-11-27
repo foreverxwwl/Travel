@@ -1,13 +1,11 @@
 package cn.itcast.travel.service.impl;
-
 import cn.itcast.travel.dao.CategoryDao;
 import cn.itcast.travel.dao.impl.CategoryDaoImpl;
 import cn.itcast.travel.domain.Category;
 import cn.itcast.travel.service.CategoryService;
-import cn.itcast.travel.util.JDBCUtils;
 import cn.itcast.travel.util.JedisUtil;
-import org.springframework.jdbc.core.JdbcTemplate;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,9 @@ public class CategoryServiceImpl implements CategoryService {
         //获取jedis数据库
         Jedis jedis = JedisUtil.getJedis();
         //可使用sortedset排序查询
-        Set<String> categorys = jedis.zrange("category", 0, -1);
+        //Set<String> categorys = jedis.zrange("category", 0, -1);
+        //1.3查询sortedset中的分数(cid)和值(cname)
+        Set<Tuple> categorys = jedis.zrangeWithScores("category", 0, -1);
         List<Category> cs = null;
         if (categorys.size() == 0 || categorys == null){
             //2.如果没有查到，那么查询数据库
@@ -42,10 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
         }else {
             //3.如果查到了，那么将查到的Set集合categorys存入List集合cs
             cs = new ArrayList<Category>();
-            for (String name : categorys) {
+            for (Tuple tuple : categorys) {
                 //封装一个分类集合
                 Category category = new Category();
-                category.setCname(name);
+                category.setCname(tuple.getElement());
+                category.setCid((int)tuple.getScore());
                 //将集合放入cs中
                 cs.add(category);
             }
