@@ -25,6 +25,9 @@ public class RouteServlet extends BaseServlet {
         String currentPageStr = request.getParameter("currentPage");
         String pageSizeStr = request.getParameter("pageSize");
         String cidstr = request.getParameter("cid");
+        String rname = request.getParameter("rname");
+        //解决git请求中文乱码问题
+        rname = new String(rname.getBytes("iso-8859-1"),"utf-8");
         //2.处理参数
         int cid = 0;
         if (cidstr != null && cidstr.length() > 0){
@@ -44,7 +47,7 @@ public class RouteServlet extends BaseServlet {
             pageSize = 5;
         }
         //3.调动service查询
-        PageBean<Route> pb = routeService.pageQuery(cid, currentPage, pageSize);
+        PageBean<Route> pb = routeService.pageQuery(cid, currentPage, pageSize, rname);
         //4.序列化为Jason返回
         writeValue(pb, response);
     }
