@@ -27,10 +27,13 @@ public class RouteServlet extends BaseServlet {
         String cidstr = request.getParameter("cid");
         String rname = request.getParameter("rname");
         //解决git请求中文乱码问题
-        rname = new String(rname.getBytes("iso-8859-1"),"utf-8");
+        rname = new String(rname.getBytes("iso-8859-1"), "utf-8");
+        if ("null".equals(rname)){
+            rname = null;
+        }
         //2.处理参数
         int cid = 0;
-        if (cidstr != null && cidstr.length() > 0){
+        if (cidstr != null && cidstr.length() > 0 && !"null".equals(cidstr)){
             cid = Integer.parseInt(cidstr);
         }
         int currentPage = 0;//当前页码默认为第一页

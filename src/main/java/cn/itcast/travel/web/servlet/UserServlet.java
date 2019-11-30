@@ -22,7 +22,7 @@ import java.util.Map;
  * @create 2019-11-25 17:40
  */
 @WebServlet("/user/*")
-public class UserServlet extends HttpServlet {
+public class UserServlet extends BaseServlet {
     //声明UserService业务对象
     private UserService service = new UserServicempi();
 
