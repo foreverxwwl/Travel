@@ -1,0 +1,23 @@
+package cn.itcast.travel.dao.impl;
+
+import cn.itcast.travel.dao.SellerDao;
+import cn.itcast.travel.domain.Seller;
+import cn.itcast.travel.util.JDBCUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+/**
+ * @outhor li
+ * @create 2019-12-01 11:21
+ * 查询商家信息
+ */
+public class SellerDaoImpl implements SellerDao {
+    private JdbcTemplate jdbcTemplate = new JdbcTemplate(JDBCUtils.getDataSource());
+
+    @Override
+    public Seller findByid(int sid) {
+        String sql = "select * from tab_seller where sid = ? ";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Seller>(Seller.class), sid);
+
+    }
+}

@@ -1,8 +1,12 @@
 package cn.itcast.travel.web.servlet;
 
+import cn.itcast.travel.domain.Favorite;
 import cn.itcast.travel.domain.PageBean;
 import cn.itcast.travel.domain.Route;
+import cn.itcast.travel.domain.User;
+import cn.itcast.travel.service.FavoriteService;
 import cn.itcast.travel.service.RouteService;
+import cn.itcast.travel.service.impl.FavoriteServiceImpl;
 import cn.itcast.travel.service.impl.RouteSerciceImpl;
 
 import javax.servlet.ServletException;
@@ -20,6 +24,14 @@ import java.io.IOException;
 @WebServlet("/route/*")
 public class RouteServlet extends BaseServlet {
     RouteService routeService = new RouteSerciceImpl();
+    FavoriteService favoriteService = new FavoriteServiceImpl();
+    /**
+     * 分页显示
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void pageQuery(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //1.接受参数
         String currentPageStr = request.getParameter("currentPage");
@@ -51,8 +63,68 @@ public class RouteServlet extends BaseServlet {
         }
         //3.调动service查询
         PageBean<Route> pb = routeService.pageQuery(cid, currentPage, pageSize, rname);
-        //4.序列化为Jason返回
+        //4.序列化为Json返回
         writeValue(pb, response);
+    }
+
+    /**
+     * 根据ID查询一个旅游路线的详细信息
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void findOne(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        //1,接收id
+        String rid = request.getParameter("rid");
+        //2.调用service查询
+        Route route = routeService.findOne(rid);
+        //3.转为json返回
+        writeValue(route,response);
+    }
+
+    /**
+     * 判断是否收藏
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void isFavorite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        //1,获取线路id
+        String rid = request.getParameter("rid");
+        //2，获取当前登录用户user
+        User user = (User) request.getSession().getAttribute("user");
+        int uid = 0;
+        //获取uid
+        if (user == null){
+            //用户未登录
+            uid = 0;
+        }else {
+            uid = user.getUid();
+        }
+        //3.调用favoriteService查询是否收藏
+        boolean flag = favoriteService.isFavorite(rid, uid);
+
+        //4.写回客户端
+        writeValue(flag,response);
+    }
+
+    public void addFavorite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        //1.获取rid
+        String rid = request.getParameter("rid");
+        //2.获取当前登录的用户
+        User user = (User) request.getSession().getAttribute("user");
+        int uid = 0;
+        //获取uid
+        if (user == null){
+            //用户未登录
+            return;
+        }else {
+            uid = user.getUid();
+        }
+        //3.调用service插入
+        favoriteService.add(rid, uid);
     }
 
 
